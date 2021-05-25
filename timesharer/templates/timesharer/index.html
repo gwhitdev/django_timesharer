@@ -1,0 +1,58 @@
+{% extends 'core/base_generic.html' %}
+
+{% block content %}
+<div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+    <h1 class="display-4 fst-italic">Welcome to TimeSharer</h1>
+    <p class="lead my-3">If you volunteer your time, you want to be able to keep control of your personal information. </p>
+    <p class="lead"><strong>With TimeSharer, you can.</strong></p>
+
+</div>
+{% endblock %}
+
+{% block opportunities %}
+<h5>Latest opportunities available</h5>
+{% if opportunities %}
+    <div class="card-group">
+        {% for o in opportunities %}
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'timesharer:opportunity_detail' o.id %} ">{{ o.title }}</a></h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ o.owned_by }}</h6>
+                {% for tag in o.tags.all %}
+                    <span class="badge bg-secondary">{{ tag }}</span>
+                    {% endfor %}<br>
+              </div>
+
+              <div class="card-footer">
+                <a href="{% url 'timesharer:opportunity_detail' o.id %} " class="card-link"><button type="button" class="btn btn-primary btn-sm"style="margin-top:5px">Register interest</button></a>
+              </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+           
+
+{% endblock %}
+
+{% block organisations %}
+<h5>Latest organisations registered</h5>
+{% if organisations %}
+    <div class="card-group">
+        {% for org in organisations %}
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'timesharer:organisation_detail' org.id %} ">{{ org.name }}</a></h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ org.location }}</h6>
+                {% for tag in org.tags.all %}
+                    <span class="badge bg-secondary">{{ tag }}</span>
+                    {% endfor %}<br>
+              </div>
+
+              <div class="card-footer">
+                <a href="{% url 'timesharer:organisation_detail' org.id %} " class="card-link"><button type="button" class="btn btn-primary btn-sm"style="margin-top:5px">Register interest</button></a>
+              </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

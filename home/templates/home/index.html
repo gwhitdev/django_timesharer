@@ -1,0 +1,38 @@
+{% extends "core/base.html" %}
+
+{% block questions %}
+    {% if questions %}
+        <ul>
+            {% for q in questions %}
+                <li>{{ q }}</li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        No questions to show
+    {% endif %}
+{% endblock questions %}
+
+{% block blog %}
+    {% if posts %}
+        <ul>
+            {% for p in posts %}
+                <li>{{ p.post_title }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock blog %}
+
+{% block images %}
+{% if photo %}
+    <ul>
+        {% for p in photo %}
+            <li><img src="{{ p.thumbnailUrl }}"></li>
+        {{ p.title }}
+    {% endfor %}
+    </ul>
+    
+{% endif %}
+{% endblock images %}
+
+

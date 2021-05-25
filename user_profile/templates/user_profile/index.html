@@ -1,0 +1,11 @@
+{% extends 'core/base_generic.html' %}
+{% block content %}
+{% if user %}
+    <ul>
+    <li>{{ user }}</li>
+    <li>{{ user.email }}</li>
+    <li>{{ user.firstname }}</li>
+    <li>{{ user.lastname }}</li>
+    </ul>
+    {% endif %}
+{% endblock %}

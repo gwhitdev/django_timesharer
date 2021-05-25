@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <a class="navbar-brand" href="/timesharer/">TimeSharer</a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" id="homeLink" aria-current="page" href="/timesharer/">Home</a>
+          </li>
+          
+        </ul>
+        {% if user.is_authenticated %}
+        <a href="/accounts/profile/" class="nav-link style="margin-right:5px"><i>Hello, {{ user }}</i></a>
+        <a href="/accounts/logout"><button class="btn btn-outline-secondary btn-sm">Logout</button></a>
+        {% else %}
+        <a href="/accounts/login/"><button class="btn btn-outline-secondary btn-sm">Login</button></a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+  <script>
+    let urlArr = window.location.href.split('/');
+    let secondLastElement = urlArr[urlArr.length-2];
+    let lastElement = urlArr[urlArr.length-1];
+    function atHomePage(last,second) {
+      const atHomePage = true;
+      const notAtHomePage = false;
+      if(second === 'timesharer' && last === '') return atHomePage;
+      return notAtHomePage;
+    }
+    const windowAtHomePage = atHomePage(lastElement,secondLastElement);
+    
+    const homeLink = document.getElementById('homeLink');
+    if(windowAtHomePage) homeLink.hidden = true;
+  </script>
+  

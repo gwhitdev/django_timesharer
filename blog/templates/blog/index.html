@@ -1,0 +1,11 @@
+{% if latest_post_list %}
+    <ul>
+        {% for post in latest_post_list %}
+            <li><a href="{% url 'blog:detail' post.id %}">{{ post.post_title }}</a> <i>{{ post.pub_date }}</i></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>
+        No blog posts are available!
+    </p>
+    {% endif %}
