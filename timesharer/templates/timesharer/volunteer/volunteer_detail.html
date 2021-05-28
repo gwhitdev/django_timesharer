@@ -1,0 +1,10 @@
+{% extends 'core/profile_base.html' %}
+
+{% block info %}
+{% if volunteer %}
+    {{ volunteer.name }}
+    {% for opp in opportunities %}
+        {{ opp.title }}
+    {% endfor %}
+{% endif %}
+{% endblock %}

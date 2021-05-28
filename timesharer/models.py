@@ -11,32 +11,27 @@ class Organisation(models.Model):
     def __str__(self):
         return self.name
 
-class Opportunity(models.Model):
-    title = models.CharField(max_length=20)
-    description = models.TextField(default='Description')
-    #labels = models.
-    is_live = models.BooleanField()
-    owned_by = models.ForeignKey(Organisation, on_delete=models.CASCADE)
-    tags = TaggableManager()
-    def __str__(self):
-        return self.title
+
 
 class Volunteer(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=20)
     location = models.CharField(max_length=20)
-    #username = models.CharField(max_length=20)
     opted_in = models.BooleanField(default='false')
     created_at = models.DateTimeField('date created')
     updated_at = models.DateTimeField('date updated')
     is_live = models.BooleanField()
-    applied_to = models.ForeignKey(Opportunity, on_delete=models.CASCADE)
+    #applied_to = models.OneToMany(Opportunity, on_delete=models.CASCADE, default="1")
     tags = TaggableManager()
     def __str__(self):
         return self.name
 
-
-
-
-    
-    
+class Opportunity(models.Model):
+    title = models.CharField(max_length=20)
+    description = models.TextField(default='Description')
+    is_live = models.BooleanField()
+    owned_by = models.ForeignKey(Organisation, on_delete=models.CASCADE)
+    volunteers = models.ForeignKey(Volunteer, on_delete=models.CASCADE, default=3)
+    tags = TaggableManager()
+    def __str__(self):
+        return self.title

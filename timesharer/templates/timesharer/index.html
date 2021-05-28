@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block opportunities %}
-<h5>Latest opportunities available</h5>
+<h5>Latest opportunities</h5>
 {% if opportunities %}
     <div class="card-group">
         {% for o in opportunities %}
@@ -19,7 +19,7 @@
                 <h5 class="card-title"><a href="{% url 'timesharer:opportunity_detail' o.id %} ">{{ o.title }}</a></h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ o.owned_by }}</h6>
                 {% for tag in o.tags.all %}
-                    <span class="badge bg-secondary">{{ tag }}</span>
+                    <a href="{% url 'timesharer:tagged_opportunities' tag.slug %}"><span class="badge bg-secondary">{{ tag }}</span></a>
                     {% endfor %}<br>
               </div>
 
@@ -35,7 +35,7 @@
 {% endblock %}
 
 {% block organisations %}
-<h5>Latest organisations registered</h5>
+<h5>Latest organisations</h5>
 {% if organisations %}
     <div class="card-group">
         {% for org in organisations %}
@@ -44,8 +44,8 @@
                 <h5 class="card-title"><a href="{% url 'timesharer:organisation_detail' org.id %} ">{{ org.name }}</a></h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ org.location }}</h6>
                 {% for tag in org.tags.all %}
-                    <span class="badge bg-secondary">{{ tag }}</span>
-                    {% endfor %}<br>
+                    <a href="{%url 'timesharer:tagged_organisations' tag.slug %}"><span class="badge bg-secondary">{{ tag }}</span></a>
+                    {% endfor %}<br> 
               </div>
 
               <div class="card-footer">

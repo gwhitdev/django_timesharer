@@ -1,0 +1,22 @@
+{% extends 'core/base_tagged.html' %}
+
+{% block content %}
+    {% if opportunities %}
+        <div class="card-group">
+            {% for o in opportunities %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ o.title }}</a></h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ o.location }}</h6>
+                        <p>{{ o.description }}</p>
+                    </div>
+    
+                    <div class="card-footer">
+                    <a href="{% url 'timesharer:opportunity_detail' o.id %} " class="card-link"><button type="button" class="btn btn-primary btn-sm"style="margin-top:5px">Register interest</button></a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+    {% endif %}
+{% endblock %}

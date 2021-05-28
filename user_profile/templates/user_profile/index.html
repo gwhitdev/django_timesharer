@@ -1,11 +1,37 @@
-{% extends 'core/base_generic.html' %}
-{% block content %}
-{% if user %}
-    <ul>
-    <li>{{ user }}</li>
-    <li>{{ user.email }}</li>
-    <li>{{ user.firstname }}</li>
-    <li>{{ user.lastname }}</li>
-    </ul>
+{% extends 'core/profile_base.html' %}
+
+{% if user.is_authenticated %}
+    {% block profile_image %}
+        PLACEHOLDER
+    {% endblock %}
+        
+    {% block profile_details %}
+        <ul>
+        <li>{{ user }}</li>
+        <li>{{ user.email }}</li>
+        <li>{{ user.firstname }}</li>
+        <li>{{ user.lastname }}</li>
+        </ul>
+
+        {% for opp in opportunities %}
+            {{ opp.title}}
+        {% endfor %}
+    {% endblock %}
+{% endif %}
+
+{% block options %}
+
+    {% if volunteer != 'No volunteer' %}
+        <a href="{% url 'timesharer:volunteer_detail' volunteer.id %}">
+            <button type="button" class="btn btn-primary">
+                View your volunteer profile
+            </button>
+        </a>
+    {% else %}
+    <a href="/timesharer/volunteer/create">
+        <button type="button" class="btn btn-primary">
+            Create your volunteer profile
+        </button>
+    </a>
     {% endif %}
 {% endblock %}
