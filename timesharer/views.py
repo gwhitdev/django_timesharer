@@ -8,9 +8,11 @@ from django.views.generic.base import TemplateView
 from .models import Volunteer, Opportunity, Organisation
 from taggit.models import Tag
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 from .volunteer_service import Volunteer_Service
 from .organisation_service import Organisation_Service
 from .opportunity_service import Opportunity_Service
+
 
 def tagged_organisations(request, slug):
     lower_case_slug = slug.lower()
@@ -32,6 +34,7 @@ def tagged_opportunities(request, slug):
     }
     return render(request, 'timesharer/tagged_opportunities.html', context)
 
+@login_required
 def amend_vol_live_status(request, volunteer_id):
     volunteer_service = Volunteer_Service(volunteer_id)
     volunteer = Volunteer.objects.get(pk=volunteer_id)
@@ -42,6 +45,7 @@ def amend_vol_live_status(request, volunteer_id):
         volunteer_service.make_live()
         return redirect('user_profile:index')
 
+@login_required
 def amend_org_live_status(request, organisation_id):
     organisation_service = Organisation_Service(organisation_id)
     organisation = Organisation.objects.get(pk=organisation_id)
@@ -52,6 +56,7 @@ def amend_org_live_status(request, organisation_id):
         organisation_service.make_live()
         return redirect('timesharer:organisation_detail',organisation_id)
 
+@login_required
 def amend_opp_live_status(request, opportunity_id):
     opportunity_service = Opportunity_Service(opportunity_id)
     opportunity = Opportunity.objects.get(pk=opportunity_id)
@@ -81,7 +86,7 @@ class CreateOpportunity(LoginRequiredMixin,CreateView):
     template_name = 'timesharer/opportunity/forms/create_opportunity.html'
     fields = ['title','is_live','owned_by']
 
-class OpportunityDetail(LoginRequiredMixin,generic.DetailView):
+class OpportunityDetail(generic.DetailView):
     model = Opportunity
     template_name = 'timesharer/opportunity/opportunity_detail.html'
 
@@ -119,7 +124,7 @@ class CreateOrganisation(LoginRequiredMixin,CreateView):
     template_name = 'timesharer/organisation/forms/create_organisation.html'
     fields = ['name', 'location', 'is_live']
 
-class OrganisationDetail(LoginRequiredMixin,generic.DetailView):
+class OrganisationDetail(generic.DetailView):
     model = Organisation
     template_name = 'timesharer/organisation/organisation_detail.html'
 
