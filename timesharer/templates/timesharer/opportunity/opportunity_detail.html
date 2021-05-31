@@ -1,3 +1,6 @@
 {% if opportunity %}
     {{ opportunity.title }}
+    {% if opportunity.is_live %}<sup><a href="{% url 'timesharer:amend_opp_status' opportunity.pk %}">(HIDE)</a></sup>
+    {% else %}<sup><a href="{% url 'timesharer:amend_opp_status' opportunity.pk %}">(MAKE PUBLIC)</a></sup>
+    {% endif %}
 {% endif %}

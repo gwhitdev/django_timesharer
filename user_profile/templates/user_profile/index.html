@@ -1,37 +1,94 @@
 {% extends 'core/profile_base.html' %}
 
 {% if user.is_authenticated %}
-    {% block profile_image %}
-        PLACEHOLDER
-    {% endblock %}
-        
     {% block profile_details %}
-        <ul>
-        <li>{{ user }}</li>
-        <li>{{ user.email }}</li>
-        <li>{{ user.firstname }}</li>
-        <li>{{ user.lastname }}</li>
-        </ul>
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde"style="width:150px" alt="...">
+            
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ user }}</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Email address: <strong>{{ user.email }}</strong></li>
+                    <li class="list-group-item">Chosen name: <strong>{{ user.first_name }}</strong></li>
+                    <li class="list-group-item">Family name: <strong>{{ user.last_name }}</strong></li>
+                </ul>
+                <div style="margin-top:5px;margin-bottom:10px">
+                {% if volunteer != 'No volunteer' %}
+                    <a href="{% url 'timesharer:volunteer_detail' volunteer.id %}">
+                        <button type="button" class="btn btn-primary">
+                            View your volunteer profile
+                        </button>
+                    </a>
+                        <div style="margin-top:10px">
+                        Volunteer profile is 
+                        {% if live_volunteer == True %}
+                         public 
+                        <a href="{% url 'timesharer:amend_vol_status'  volunteer_id=volunteer.id %}"><span class="badge bg-danger">Hide</span></a>
+                        {% else %}
+                         hidden 
+                        <a href="{% url 'timesharer:amend_vol_status' volunteer_id=volunteer.id %}" ><span class="badge bg-success">Show</span></a>
+                        {% endif %}
+                    </div>
+                    </a>
+                {% else %}
+                    <a href="/timesharer/volunteer/create">
+                        <button type="button" class="btn btn-primary">
+                            Create your volunteer profile
+                        </button>
+                    </a>
+                {% endif %}
+                
+                
+                </div>
+                <p class="card-text">
+                  <small class="text-muted">
+                      Last updated 
+                        {% if recent %}
+                            just now
+                        {% else %}
+                            {{ volunteer.updated_at|timesince }} ago
+                        {% endif %}
+                    </small>
+                </p>
+            </div>
 
-        {% for opp in opportunities %}
-            {{ opp.title}}
-        {% endfor %}
+          </div>
+
+          
+        </div>
+      </div>
+    
+        
     {% endblock %}
+
 {% endif %}
 
-{% block options %}
+{% block opportunities %}
+    {% if opportunities %}
 
-    {% if volunteer != 'No volunteer' %}
-        <a href="{% url 'timesharer:volunteer_detail' volunteer.id %}">
-            <button type="button" class="btn btn-primary">
-                View your volunteer profile
-            </button>
-        </a>
-    {% else %}
-    <a href="/timesharer/volunteer/create">
-        <button type="button" class="btn btn-primary">
-            Create your volunteer profile
-        </button>
-    </a>
-    {% endif %}
+        {% if opportunities.zero %}
+            No opportunities applied to
+        {% else %}
+        {% for opp in opportunities %}
+        <div class="col">
+            <div class="card h-100">
+                <img src="https://images.unsplash.com/photo-1622115168398-af384a2b4d85?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ opp.title }}</h5>
+                        <p>{{ opp.description }}</p>
+                    </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+{% endif %}
+{% endblock opportunities %}
+
+{% block options %}
+      
+    
 {% endblock %}

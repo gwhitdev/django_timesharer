@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.db.models import F
 from django.views import generic
@@ -7,6 +7,10 @@ from django.views.generic import CreateView, DeleteView, UpdateView
 from django.views.generic.base import TemplateView
 from .models import Volunteer, Opportunity, Organisation
 from taggit.models import Tag
+from django.utils import timezone
+from .volunteer_service import Volunteer_Service
+from .organisation_service import Organisation_Service
+from .opportunity_service import Opportunity_Service
 
 def tagged_organisations(request, slug):
     lower_case_slug = slug.lower()
@@ -28,12 +32,47 @@ def tagged_opportunities(request, slug):
     }
     return render(request, 'timesharer/tagged_opportunities.html', context)
 
+def amend_vol_live_status(request, volunteer_id):
+    volunteer_service = Volunteer_Service(volunteer_id)
+    volunteer = Volunteer.objects.get(pk=volunteer_id)
+    if volunteer.is_live:
+        volunteer_service.make_not_live()
+        return redirect('user_profile:index')
+    if volunteer.is_live == False:
+        volunteer_service.make_live()
+        return redirect('user_profile:index')
+
+def amend_org_live_status(request, organisation_id):
+    organisation_service = Organisation_Service(organisation_id)
+    organisation = Organisation.objects.get(pk=organisation_id)
+    if organisation.is_live:
+        organisation_service.make_not_live()
+        return redirect('timesharer:organisation_detail',organisation_id)
+    if organisation.is_live == False:
+        organisation_service.make_live()
+        return redirect('timesharer:organisation_detail',organisation_id)
+
+def amend_opp_live_status(request, opportunity_id):
+    opportunity_service = Opportunity_Service(opportunity_id)
+    opportunity = Opportunity.objects.get(pk=opportunity_id)
+    if opportunity.is_live:
+        opportunity_service.make_not_live()
+        return redirect('timesharer:opportunity_detail', opportunity_id)
+    if opportunity.is_live == False:
+        opportunity_service.make_live()
+        return redirect('timesharer:opportunity_detail', opportunity_id)
+
+
 class IndexView(TemplateView):
     template_name = 'timesharer/index.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['organisations'] = Organisation.objects.all()[:5]
-        context['opportunities'] = Opportunity.objects.all()[:5]
+        public_volunteers = Volunteer.objects.filter(is_live=True).order_by('created_at')[:5]
+        public_organisations = Organisation.objects.filter(is_live=True).order_by('-created_at')[:5]
+        public_opportunities = Opportunity.objects.filter(is_live=True).order_by('-created_at')[:5]
+        context['organisations'] = public_organisations
+        context['opportunities'] = public_opportunities
+        context['volunteers'] = public_volunteers
         return context
 
 #OPPORTUNITY
@@ -64,6 +103,7 @@ class CreateVolunteer(LoginRequiredMixin,CreateView):
 
 class VolunteerDetail(LoginRequiredMixin,generic.DetailView):
     model = Volunteer
+    #recent = (updated_at - timezone.now()).seconds < 60
     template_name = 'timesharer/volunteer/volunteer_detail.html'
 
 class DeleteVolunteer(LoginRequiredMixin,generic.DeleteView):

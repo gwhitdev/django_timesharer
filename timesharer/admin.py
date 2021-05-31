@@ -9,7 +9,7 @@ class OpportunitiesInLine(admin.StackedInline):
 
 class OrganisationAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,                  {'fields': ['name']}),
+        (None,                  {'fields': ['name','created_at']}),
         ('Organisation details',    {'fields': ['location','is_live','tags']})
     ]
     inlines = [OpportunitiesInLine]

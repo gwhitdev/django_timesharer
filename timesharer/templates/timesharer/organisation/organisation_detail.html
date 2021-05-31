@@ -2,4 +2,7 @@
 
 {% if organisation %}
     {{ organisation.name }}
+    {% if organisation.is_live %} LIVE <sup><a href="{% url 'timesharer:amend_org_status' organisation.pk %}">(Hide)</a></sup>
+    {% else %} NOTE LIVE <sup>(<a href="{% url 'timesharer:amend_org_status' organisation.pk %}">Make public</a>)</sup>
+    {% endif %}
 {% endif %}

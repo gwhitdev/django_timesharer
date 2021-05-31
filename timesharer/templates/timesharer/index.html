@@ -36,7 +36,7 @@
 
 {% block organisations %}
 <h5>Latest organisations</h5>
-{% if organisations %}
+{% if organisations.count > 0 %}
     <div class="card-group">
         {% for org in organisations %}
             <div class="card">
@@ -53,6 +53,38 @@
               </div>
             </div>
         {% endfor %}
+    </div>
+{% else %}
+  <div class="card">
+    <div class="card-body">
+      There are currently no publicly accessible volunteer profiles available. Please try again later.
+    </div>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block volunteers %}
+<h5>Latest volunteers</h5>
+{% if volunteers.count > 0 %}
+    <div class="card-group">
+        {% for vol in volunteers %}
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'timesharer:volunteer_detail' vol.id %} ">{{ vol.name }}</a></h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ vol.location }}</h6>
+              </div>
+
+              <div class="card-footer">
+                
+              </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card">
+      <div class="card-body">
+        There are currently no publicly accessible volunteer profiles available. Please try again later.
+      </div>
     </div>
 {% endif %}
 {% endblock %}

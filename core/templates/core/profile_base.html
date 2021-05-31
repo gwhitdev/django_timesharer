@@ -11,7 +11,7 @@
     {% include 'core/navbar.html' %}
     <div class="container">
         <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
-            <h1 class="display-4 fst-italic">Welcome {{ capitalised_name }}</h1>
+            <h1 class="display-4 fst-italic">Welcome, {{ capitalised_name }}...</h1>
             <p class="lead my-3">This is your user dashboard. Here you can create, edit and control your personal information, your registered opportunities 
                 and see what the latest updates are.</p>
             <p class="lead"><strong>With TimeSharer, you can.</strong></p>
@@ -25,21 +25,26 @@
             
         </div>
         <div class="row">
-            <div class="col">
-                {% block profile_image %}
-                {% endblock %}
-            </div>
-            <div class="col">
+            <div class="col-sm-12 col-md-5">
                 {% block profile_details %}
                 {% endblock %}
             </div>
-            
-        </div>
-        
-    
-        <div class="row">
-            {% block options %}
-            {% endblock %}
+            <div class="col-sm-12 col-md-7">
+                <div class="row">
+                    <div class="col">
+                        {% block options %}
+                        {% endblock %}
+                    </div>
+                </div>
+                <div class="row row-cols-1 row-cols-md-3 g-4 ">
+                    
+                        {% block opportunities %}
+                        {% endblock %}
+                    
+                    
+                </div>
+                
+            </div>
         </div>
     </div>
 
