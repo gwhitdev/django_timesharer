@@ -1,10 +1,16 @@
-{% extends 'core/profile_base.html' %}
+{% extends 'core/base_public_volunteer_profile.html' %}
 
-{% block info %}
+{% block content %}
 {% if volunteer %}
     {{ volunteer.name }}
-    {% for opp in opportunities %}
-        {{ opp.title }}
-    {% endfor %}
 {% endif %}
-{% endblock %}
+<br>User id: {{ user.id }}
+<br>Created by: {{ volunteer.created_by }}
+<br>username: {{ user.username }}
+<br>
+{% if matched %}
+    <a href="{% url 'timesharer:edit_volunteer' volunteer.pk %}"class="btn btn-sm btn-warning">Edit details</a>
+{% else %}
+
+{% endif %}
+{% endblock content %}

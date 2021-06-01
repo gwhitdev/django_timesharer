@@ -17,29 +17,33 @@
                     <li class="list-group-item">Family name: <strong>{{ user.last_name }}</strong></li>
                 </ul>
                 <div style="margin-top:5px;margin-bottom:10px">
-                {% if volunteer != 'No volunteer' %}
-                    <a href="{% url 'timesharer:volunteer_detail' volunteer.id %}">
-                        <button type="button" class="btn btn-primary">
-                            View your volunteer profile
-                        </button>
-                    </a>
-                        <div style="margin-top:10px">
-                        Volunteer profile is 
-                        {% if live_volunteer == True %}
-                         public 
-                        <a href="{% url 'timesharer:amend_vol_status'  volunteer_id=volunteer.id %}"><span class="badge bg-danger">Hide</span></a>
-                        {% else %}
-                         hidden 
-                        <a href="{% url 'timesharer:amend_vol_status' volunteer_id=volunteer.id %}" ><span class="badge bg-success">Show</span></a>
-                        {% endif %}
-                    </div>
-                    </a>
-                {% else %}
-                    <a href="/timesharer/volunteer/create">
-                        <button type="button" class="btn btn-primary">
-                            Create your volunteer profile
-                        </button>
-                    </a>
+                {% if volunteer %}
+                    {% if volunteer.error %}
+                        <a href="/timesharer/volunteer/create">
+                            <button type="button" class="btn btn-primary">
+                                Create your volunteer profile
+                            </button>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'timesharer:volunteer_detail' volunteer.id %}">
+                            <button type="button" class="btn btn-primary">
+                                View your volunteer profile
+                            </button>
+                        </a>
+                            <div style="margin-top:10px">
+                            Volunteer profile is 
+                            {% if live_volunteer == True %}
+                            public 
+                            <a href="{% url 'timesharer:amend_vol_status'  volunteer_id=volunteer.id %}"><span class="badge bg-danger">Hide</span></a>
+                            {% else %}
+                            hidden 
+                            <a href="{% url 'timesharer:amend_vol_status' volunteer_id=volunteer.id %}" ><span class="badge bg-success">Show</span></a>
+                            {% endif %}
+                        </div>
+                        </a>
+                    {% endif %}
+                    {% else %}
+                        Sorry, something has gone wrong. Please try again.
                 {% endif %}
                 
                 
@@ -69,9 +73,9 @@
 
 {% block opportunities %}
     {% if opportunities %}
-
-        {% if opportunities.zero %}
-            No opportunities applied to
+        
+        {% if opportunities.error %}
+            None to show.
         {% else %}
         {% for opp in opportunities %}
         <div class="col">

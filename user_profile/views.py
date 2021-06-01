@@ -19,12 +19,17 @@ def index(request):
         volunteer = 'No volunteer'
 
     if volunteer != 'No volunteer':
-        opportunities = volunteer.opportunity_set.all()
+        opportunities = Opportunity.objects.filter(pk=volunteer.pk)
+        live_volunteer = volunteer.is_live
+        print(volunteer)
 
     if volunteer == 'No volunteer':
-        opportunities = { 'zero': 1 }
+        volunteer = {'error': 'No volunteer'}
+        opportunities = {'error':'No opportunities'}
+        live_volunteer = {'error': 'No volunteer'}
+        print(volunteer)
 
-    live_volunteer = volunteer.is_live
+    
 
     capitalised_name = user.first_name.capitalize()
 

@@ -1,8 +1,24 @@
-
+{% extends 'core/base_detail.html' %}
 
 {% if organisation %}
-    {{ organisation.name }}
-    {% if organisation.is_live %} LIVE <sup><a href="{% url 'timesharer:amend_org_status' organisation.pk %}">(Hide)</a></sup>
-    {% else %} NOTE LIVE <sup>(<a href="{% url 'timesharer:amend_org_status' organisation.pk %}">Make public</a>)</sup>
-    {% endif %}
+    {% block detail_header %}
+        <h1>{{ organisation.name }}</h1>
+        {% if matched %}
+            {% if organisation.is_live %} 
+                LIVE <sup><a href="{% url 'timesharer:amend_org_status' organisation.pk %}">(Hide)</a></sup>
+            {% else %} 
+                NOT LIVE <sup>(<a href="{% url 'timesharer:amend_org_status' organisation.pk %}">Make public</a>)</sup>
+            {% endif %}
+        {% else %}
+        {% endif %}
+    {% endblock detail_header %}
+
+    {% block detail %}
+        <div class="row">
+            {{ organisation.description }}
+        </div>
+        
+    {% endblock detail %}
+{% else %}
+    Something went wrong. Please try again.
 {% endif %}

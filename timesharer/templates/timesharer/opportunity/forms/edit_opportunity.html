@@ -1,0 +1,16 @@
+{% extends 'core/base_form.html' %}
+
+    {% block form_header %}
+    {% if opportunity %}
+        <h1 class="display-4 fst-italic">{{ opportunity.title }}</h1>
+        {% endif %}
+    {% endblock form_header %}
+    
+    {% block form %}
+    {% if opportunity %}
+        <form method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Save">
+        </form>
+    
+    {% endif %}{% endblock form %}

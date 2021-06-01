@@ -95,6 +95,7 @@ class DeleteOpportunity(LoginRequiredMixin,generic.DeleteView):
 
 class EditOpportunity(LoginRequiredMixin,generic.UpdateView):
     model = Opportunity
+    fields = ['title','location','description']
     template_name = 'timesharer/opportunity/forms/edit_opportunity.html'
 
 #VOLUNTEER
@@ -109,6 +110,25 @@ class CreateVolunteer(LoginRequiredMixin,CreateView):
 class VolunteerDetail(LoginRequiredMixin,generic.DetailView):
     model = Volunteer
     #recent = (updated_at - timezone.now()).seconds < 60
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        url = self.request.get_full_path()
+        vol_id = url.split('/')[3]
+        
+        if self.request.user.is_authenticated:
+            username = self.request.user.username
+            vol = Volunteer.objects.get(pk=vol_id)
+            created_by = vol.created_by
+
+        matched = False
+        
+        if str(created_by) == username:
+            matched = True
+
+        context['matched'] = matched
+        return context
+    
+
     template_name = 'timesharer/volunteer/volunteer_detail.html'
 
 class DeleteVolunteer(LoginRequiredMixin,generic.DeleteView):
@@ -116,6 +136,7 @@ class DeleteVolunteer(LoginRequiredMixin,generic.DeleteView):
 
 class EditVolunteer(LoginRequiredMixin,generic.UpdateView):
     model = Volunteer
+    fields = ['name','location','is_live','opted_in']
     template_name = 'timesharer/volunteer/forms/edit_volunteer.html'
 
 #ORGANISATION
@@ -128,10 +149,29 @@ class OrganisationDetail(generic.DetailView):
     model = Organisation
     template_name = 'timesharer/organisation/organisation_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        url = self.request.get_full_path()
+        org_id = url.split('/')[3]
+        
+        if self.request.user.is_authenticated:
+            username = self.request.user.username
+            org = Organisation.objects.get(pk=org_id)
+            owned_by = org.owned_by
+
+        matched = False
+        
+        if str(owned_by) == username:
+            matched = True
+
+        context['matched'] = matched
+        return context
+
 class DeleteOrganisation(LoginRequiredMixin,generic.DeleteView):
     template_name = 'timesharer/organisation/forms/delete_organisation.html'
 
 class EditOrganisation(LoginRequiredMixin,generic.UpdateView):
     model = Organisation
+    fields = ['name','location','is_live','opportunity_set']
     template_name = 'timesharer/organisation/forms/edit_organisation.html'
 
